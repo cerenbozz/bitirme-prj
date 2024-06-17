@@ -1,13 +1,12 @@
 import json
-
-import requests
+import os
 import requests
 from urllib.parse import urljoin
-
-
 import threading
 import time
 from pynput import keyboard
+
+general_counter = 0
 
 # Define a function to perform the task
 def perform_task():
@@ -30,29 +29,49 @@ def perform_task():
     else:
     print('Got unexpected status code {}: {!r}'.format(resp.status_code, resp.content))
     """
-    with open('emotion_results.json', 'r') as file:
-        data = file.read()
-    files = {"content": data}
-    resp = requests.post(
-        urljoin(api_base, "files/path/home/{username}/mysite/emotion_results.json".format(username=username)),
-        files=files,
-        headers={"Authorization": "Token {api_token}".format(api_token=api_token)}
-    )
-    print(resp.status_code)
-    print(resp.content)
+    dir_files = [f for f in os.listdir("results")]
+    for file in dir_files:
+        dot_index = file.rfind('.')
+        file_username = file[:dot_index] if dot_index != -1 else file
+        file_extension = file[dot_index + 1:]
+        if file_extension == "json":
+            with open(f'results/{file}', 'r') as f:
+                data = f.read()
+            files = {"content": data}
+        if file_extension == "png":
+            files = {'content': open(f'results/{file}', 'rb')}
+
+        global general_counter
+
+        file = f"{file_username}_{general_counter}.{file_extension}"
+        resp = requests.post(
+            urljoin(api_base, f"files/path/home/{username}/mysite/data/{file_username}/{file}"),
+            files=files,
+            headers={"Authorization": "Token {api_token}".format(api_token=api_token)}
+        )
+        print(file)
+        print(resp.status_code)
+        print(resp.content)
+
 
 # This is the function that will run every 10 seconds
 def periodic_task():
+    global general_counter
     while not stop_event.is_set():
         perform_task()
+        general_counter += 1
+        general_counter %= 5
         time.sleep(10)
 
 # This is the function that will run when the specific key is pressed
 def on_press(key):
+    global general_counter
     try:
         if key.char == 'q':  # Replace 'q' with your specific key
             print("Key pressed!")
             perform_task()
+            general_counter += 1
+            general_counter %= 5
     except AttributeError:
         pass
 

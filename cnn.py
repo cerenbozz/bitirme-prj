@@ -65,17 +65,17 @@ class SimpleFacerec:
         return face_locations, face_names
 
 def save_results_to_json(face_names, predictions):
-    results = []
+    
     for name, prediction in zip(face_names, predictions):
-        result = {"name": name, "emotions": {}}
+        if name == "Unknown":
+            continue
+        result = {"name": name, "emotions": {}, "time": time.time()}
         emotion_labels = ["anger", "disgust", "fear", "happy", "neutral", "sad", "surprise"]
         for i, emotion in enumerate(emotion_labels):
             result["emotions"][emotion] = predictions[0][i] * 100
-        results.append(result)
-
-    with open('emotion_results.json', 'w') as json_file:
-        json.dump(results, json_file, indent=4)
-
+        with open(f'results/{name}.json', 'w') as json_file:
+            json.dump(result, json_file, indent=4)
+    
 
 def make_model(input_shape, num_classes):
     inputs = keras.Input(shape=input_shape)
@@ -178,6 +178,8 @@ def start_cnn(ui):
             face_roi = image[y1:y2, x1:x2]
 
             resized_face = cv2.resize(face_roi, (224, 224))
+            if name != "Unknown":
+                cv2.imwrite(f"results/{name}.png", resized_face)
 
             cv2.putText(image, name, (x1, y1 - 10), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 200), 2)
             cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 200), 4)
