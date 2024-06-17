@@ -1,0 +1,2 @@
+admin,admin,admin@admin.com,$5$rounds=535000$9MUs2wkg93x2Kuqg$fadT0kbzz.FAX45xJfm.lC74OzYbnft.JUg2LqDoGW9
+isik,isikkusgoz,kusgoz@outlook.com,$5$rounds=535000$Mbi87PsooVGB9hno$rAi5f1Fpjq3H..afegIUGaeMCZVki/NE.kAGTQHfQ3D
