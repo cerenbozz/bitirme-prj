@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 20px;
+    }
+
+    .container {
+        display: flex;
+        align-items: flex-start; /* Align items at the start */
+        gap: 20px; /* Space between the image and the info */
+        width: 80%; /* Set a specific width for the container */
+        margin: auto; /* Center the container horizontally */
+        margin-bottom: 20px; /* Space between the containers */
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column; /* Stack items vertically */
+        gap: 10px; /* Space between the vertical items */
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%; /* Ensure the table takes up available space */
+    }
+
+    table, th, td {
+        border: 1px solid black; /* Table border */
+        padding: 8px;
+    }
+
+    hr {
+        border: none; /* Remove the default border */
+        border-top: 2px solid black; /* Add a black border on top */
+        width: 80%; /* Match the width of the container */
+        margin: 20px auto; /* Center the hr horizontally and add top/bottom margin */
+    }
+</style>
+{% endblock head %}
+{% block body %}
+<body>
+<h1>JSON Data Visualization</h1>
+<div id="json-data"></div>
+
+<script>
+    // Function to convert Unix timestamp to human-readable format
+    function formatUnixTimestamp(unixTimestamp) {
+        const date = new Date(unixTimestamp * 1000); // Convert to milliseconds
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        return date.toLocaleString('tr-TR', options);
+    }
+
+    // Function to fetch and display JSON data
+    function fetchAndDisplayJSON() {
+        fetch('/isikkusgoz_combined.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to load JSON file`);
+                    }
+                    return response.json();
+                })
+                .then(jsonArray => {
+                    const container = document.getElementById('json-data');
+                    let html = '';
+
+                    jsonArray.forEach(json => {
+                        html += '<div class="container">';
+                        html += '<div class="info">';
+                        html += `<h2>Name: ${json.name}</h2>`;
+                        html += `<h3>Time: ${formatUnixTimestamp(json.time)}</h3>`;
+                        html += '<h3>Emotions:</h3>';
+
+                        html += '<table><tr><th>Emotion</th><th>Value</th></tr>';
+
+                        for (let emotion in json.emotions) {
+                            html += `<tr><td>${emotion}</td><td>${json.emotions[emotion].toFixed(2)}%</td></tr>`;
+                        }
+
+                        html += '</table>';
+                        html += '</div>';
+                        html += `<img alt="" src="../static/${json.name}/${json.name}_${json.id}.png" style="height:500px; width:500px" />`;
+                        html += '</div>';
+                        html += '<hr>';
+                    });
+
+                    container.innerHTML = html;
+                    console.log('Received data:', jsonArray);
+                })
+                .catch(error => console.error('Error loading JSON file:', error));
+    }
+
+    // Fetch and display the JSON data when the page loads
+    document.addEventListener('DOMContentLoaded', fetchAndDisplayJSON);
+</script>
+</body>
+{% endblock body %}

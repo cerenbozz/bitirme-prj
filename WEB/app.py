@@ -38,7 +38,7 @@ class LoginForm(Form):
 
 app = Flask(__name__)
 app.secret_key = "bitirme_tezi"
-database = 'WEB/database.txt'
+database = 'database.txt'
 
 
 @app.route("/")
@@ -47,9 +47,14 @@ def index():
 
 
 @app.route("/about")
-@login_required
 def about():
     return render_template("about.html")
+
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    return render_template("dashboard.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -77,7 +82,8 @@ def register():
         with open(database, 'a') as f:
             f.write(f"{name},{username},{email},{password}\n")
         flash("You have registered successfully.", "success")
-        os.makedirs(f"./WEB/data/{username}")
+        os.makedirs(f"./data/{username}")
+        os.makedirs(f"./static/{username}")
         return redirect(url_for("login"))
     else:
         return render_template("register.html", form=form)
@@ -118,10 +124,28 @@ def logout():
 @app.route('/api/emotions', methods=["GET", "POST"])
 def get_emotions():
     username = session["username"]
-    
+
     with open('emotion_results.json', 'r') as file:
         data = json.load(file)
     return jsonify(data)
+
+
+@app.route('/isikkusgoz_combined.json', methods=["GET", "POST"])
+def json_():
+    username = session["username"]
+    #ids = request.args.getlist('id')
+    combined_data = []
+
+    for i in range(5)[::-1]:
+        with open(f'data/{username}/{username}_{i}.json', 'r') as file:
+            data = json.load(file)
+            data['id'] = i  # Add the ID to the data
+            combined_data.append(data)
+    sorted_data = sorted(combined_data, key=lambda x: x['time'])
+
+    """with open(f'data/{username}/{username}_combined.json', 'w') as file:
+        json.dump(combined_data, file, indent=4)"""
+    return jsonify(sorted_data)
 
 
 if __name__ == '__main__':
