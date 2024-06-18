@@ -63,7 +63,7 @@
 
     // Function to fetch and display JSON data
     function fetchAndDisplayJSON() {
-        fetch('/isikkusgoz_combined.json')
+        fetch('/emotions')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Failed to load JSON file`);

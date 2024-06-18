@@ -1,3 +1,4 @@
 admin,admin,admin@admin.com,$5$rounds=535000$9MUs2wkg93x2Kuqg$fadT0kbzz.FAX45xJfm.lC74OzYbnft.JUg2LqDoGW9
 isik,isikkusgoz,kusgoz@outlook.com,$5$rounds=535000$Mbi87PsooVGB9hno$rAi5f1Fpjq3H..afegIUGaeMCZVki/NE.kAGTQHfQ3D
 qweweqwqe,qweeqweqweqw,asd@asdas.com,$5$rounds=535000$rjStQ6tMT/TfOmoM$9v8LyoljNOF9lkpV5Ri6iZyZ.Q5nsfLIwb4WyuAgQ29
+isik,isikkusgozz,kusgodsaz@outlook.com,$5$rounds=535000$olCtSCNiAzjPvB0C$GXjXWcpqlTKjmHPuXkm1Jz80oCGP/sXnY2HEEmGY/N8

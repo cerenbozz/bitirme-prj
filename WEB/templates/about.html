@@ -1,8 +1,27 @@
 {% extends "layout.html" %}
+{% block head %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 20px;
+    }
 
+    h3, p {
+        margin-left: 185px;
+    }
+
+    hr {
+        border: none; /* Remove the default border */
+        border-top: 2px solid black; /* Add a black border on top */
+        width: 80%; /* Match the width of the container */
+        margin: 20px auto; /* Center the hr horizontally and add top/bottom margin */
+    }
+</style>
+{% endblock head %}
 {% block body %}
 <h3>About</h3>
 <hr>
-Lorem ipsum, dolor sit amet consectetur adipisicing elit. Commodi totam iure ex excepturi voluptates qui eum mollitia atque reiciendis quos, adipisci deleniti modi sit inventore itaque magni porro vel autem sequi amet, dolore iste accusantium. Soluta sint numquam officia earum pariatur. Non, ad quo explicabo accusamus eius magni odio vitae illum laborum, nihil itaque, necessitatibus voluptates a? Atque ad provident et cumque sequi velit laborum rerum placeat quisquam odit ipsam, harum odio eum nobis sit? Possimus nostrum laboriosam aut reiciendis dolor amet modi ab, tenetur architecto, excepturi sequi dolore suscipit! Iure architecto libero, alias nobis tempore consectetur odio voluptate cupiditate.
+<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Commodi totam iure ex excepturi voluptates qui eum mollitia atque reiciendis quos, adipisci deleniti modi sit inventore itaque magni porro vel autem sequi amet, dolore iste accusantium. Soluta sint numquam officia earum pariatur. Non, ad quo explicabo accusamus eius magni odio vitae illum laborum, nihil itaque, necessitatibus voluptates a? Atque ad provident et cumque sequi velit laborum rerum placeat quisquam odit ipsam, harum odio eum nobis sit? Possimus nostrum laboriosam aut reiciendis dolor amet modi ab, tenetur architecto, excepturi sequi dolore suscipit! Iure architecto libero, alias nobis tempore consectetur odio voluptate cupiditate.</p>
 <hr>
 {% endblock body %}

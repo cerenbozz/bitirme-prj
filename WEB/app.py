@@ -7,7 +7,6 @@ from passlib.hash import sha256_crypt
 from functools import wraps
 
 
-# Giriş yapıldı mı decoratoru
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -82,8 +81,9 @@ def register():
         with open(database, 'a') as f:
             f.write(f"{name},{username},{email},{password}\n")
         flash("You have registered successfully.", "success")
-        os.makedirs(f"./data/{username}")
-        os.makedirs(f"./static/{username}")
+        if not os.path.isdir(f"./data/{username}"):
+            os.makedirs(f"./data/{username}")
+            os.makedirs(f"./static/{username}")
         return redirect(url_for("login"))
     else:
         return render_template("register.html", form=form)
@@ -121,31 +121,38 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route('/api/emotions', methods=["GET", "POST"])
+@app.route('/emotions', methods=["GET", "POST"])
+@login_required
 def get_emotions():
     username = session["username"]
-
-    with open('emotion_results.json', 'r') as file:
-        data = json.load(file)
-    return jsonify(data)
-
-
-@app.route('/isikkusgoz_combined.json', methods=["GET", "POST"])
-def json_():
-    username = session["username"]
-    #ids = request.args.getlist('id')
+    # ids = request.args.getlist('id')
     combined_data = []
 
-    for i in range(5)[::-1]:
-        with open(f'data/{username}/{username}_{i}.json', 'r') as file:
-            data = json.load(file)
-            data['id'] = i  # Add the ID to the data
-            combined_data.append(data)
+    if username == "admin":
+        data_directory = 'data'
+        for user_dir in os.listdir(data_directory):
+            user_path = os.path.join(data_directory, user_dir)
+            if os.path.isdir(user_path):
+                combined_data += combine_json(user_path, user_dir)
+    else:
+        user_path = os.path.join('data', username)
+        combined_data = combine_json(user_path, username)
+
     sorted_data = sorted(combined_data, key=lambda x: x['time'])
 
-    """with open(f'data/{username}/{username}_combined.json', 'w') as file:
-        json.dump(combined_data, file, indent=4)"""
     return jsonify(sorted_data)
+
+
+def combine_json(user_path, username):
+    combined_data = []
+    for i in range(5)[::-1]:
+        file_path = os.path.join(user_path, f'{username}_{i}.json')
+        if os.path.isfile(file_path):
+            with open(file_path, 'r') as file:
+                data = json.load(file)
+                data['id'] = i  # Add the ID to the data
+                combined_data.append(data)
+    return combined_data
 
 
 if __name__ == '__main__':
