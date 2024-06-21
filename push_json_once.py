@@ -1,13 +1,11 @@
 import json
 import os
-
-import requests
 import requests
 from urllib.parse import urljoin
 
 general_counter = 0
 
-api_token = "1d52d143451da56520e8e5f982237d7dbfc3c230"
+api_token = "ENTER YOUR API TOKEN HERE"
 username = "isikkusgoz"
 pythonanywhere_host = "www.pythonanywhere.com"
 domain = "isikkusgoz.pythonanywhere.com"

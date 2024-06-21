@@ -11,7 +11,7 @@ general_counter = 0
 # Define a function to perform the task
 def perform_task():
     print("Performing the task...")
-    api_token = "1d52d143451da56520e8e5f982237d7dbfc3c230"
+    api_token = "ENTER YOUR API TOKEN HERE"
     username = "isikkusgoz"
     pythonanywhere_host = "www.pythonanywhere.com"
     domain = "isikkusgoz.pythonanywhere.com"
