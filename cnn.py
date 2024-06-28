@@ -40,7 +40,7 @@ class SimpleFacerec:
     def detect_known_faces(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # Yüz tespit
+        # Face Detection
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
 
@@ -52,7 +52,7 @@ class SimpleFacerec:
 
         face_names = []
         for face_encoding in face_encodings:
-            # Yüzleri tanı
+            # Face Recognition
             matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
             name = "Unknown"
 
